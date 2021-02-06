@@ -1,10 +1,12 @@
 const knex = require('../db/knex');
 
-module.exports = function(name, price) {
-  this.name = name;
-  this.price = price;
+module.exports = class Product {
+  constructor (name, price) {
+    this.name = name;
+    this.price = price;
+  }
 
-  this.save = async () => {
+  save = async () => {
     const result = await knex('products')
       .insert({ name: this.name, price: this.price })
       .returning('*');
@@ -12,7 +14,7 @@ module.exports = function(name, price) {
     return result;
   }
 
-  this.get = async () => {
-
+  get = async () => {
+    return null
   }
 }

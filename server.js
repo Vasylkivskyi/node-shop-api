@@ -29,7 +29,7 @@ app.use((req, res, next) => {
     );
     return res.status(200).json({}); // From here we don't want to go to our routes
   }
-  next()
+  next();
 })
 
 // Routes
