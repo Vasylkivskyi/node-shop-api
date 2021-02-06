@@ -20,7 +20,7 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization' // if all => replace with '*'
   );
-  // Browser always sends OPTIONS request first than you send POST request
+  // Browser always sends OPTIONS request first than you send POST requests
   if (req.method === 'OPTIONS') {
     res.header(
       'Access-Control-Allow-Methods',
