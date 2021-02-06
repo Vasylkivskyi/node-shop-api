@@ -31,6 +31,11 @@ router.post('/', async (req, res, next) => {
 router.get('/:productId', async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.productId);
+    if (!product.length) {
+      const error = new Error('Not found');
+      error.status = 404;
+      throw error;
+    }
     res.status(200).json(responseHelper({
       data: product,
     }));
@@ -53,7 +58,7 @@ router.patch('/:productId', async(req, res, next) => {
 
 router.delete('/:productId', async(req, res, next) => {
   try {
-    const deletedProduct = await Product.delete(req.params.productId);
+    const deletedProduct = await Product.remove(req.params.productId);
     res.status(200).json(responseHelper({ data: deletedProduct }));
   } catch (error) {
     next(error);

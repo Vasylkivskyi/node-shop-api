@@ -39,7 +39,7 @@ module.exports = class Product {
     return result;
   }
 
-  static delete = async(productId) => {
+  static remove = async(productId) => {
     const result = await knex('products')
       .where({ id: productId })
       .del()
