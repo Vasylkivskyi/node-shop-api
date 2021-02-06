@@ -1,39 +1,63 @@
 const express = require('express');
+const responseHelper = require('../helpers.js/responseHelper');
 const router = express.Router();
 const Product = require('../models/product');
 
 router.get('/', async (req, res, next) => {
-  const products = await Product.getAll({ page: req.query.page, limit: req.query.limit });
-  res.status(200).json({ data: products });
+  const { page, limit } = req.query;
+  try {
+    const products = await Product.all({ page, limit });
+    res.status(200).json(responseHelper({
+      page,
+      limit,
+      total: products.length ? products[0].total : 0,
+      data: products,
+    }));
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post('/', async (req, res, next) => {
   const product = new Product(req.body.name, req.body.price);
-  const result = await product.save();
-  res.status(201).json({
-    message: 'Product was saved' ,
-    data: result,
-  });
+  try {
+    const result = await product.save();
+    res.status(201).json(responseHelper({ data: result }));
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get('/:productId', async (req, res, next) => {
-  const product = await Product.get(req.params.productId);
-  res.status(200).json({
-    'message': `You are requesting for product with id: ${req.params.productId}`,
-    data: product,
-  });
+  try {
+    const product = await Product.findById(req.params.productId);
+    res.status(200).json(responseHelper({
+      data: product,
+    }));
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.patch('/:productId', (req, res, next) => {
-  res.status(200).json({
-    'message': `Updated product with id: ${req.params.productId}`
-  });
+router.patch('/:productId', async(req, res, next) => {
+  const { name, price } = req.body;
+  try {
+    const newProduct = await Product.update(req.params.productId, {
+      name, price,
+    })
+    res.status(200).json(responseHelper({ data: newProduct }));
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.delete('/:productId', (req, res, next) => {
-  res.status(200).json({
-    'message': `Deleted product with id: ${req.params.productId}`
-  });
+router.delete('/:productId', async(req, res, next) => {
+  try {
+    const deletedProduct = await Product.delete(req.params.productId);
+    res.status(200).json(responseHelper({ data: deletedProduct }));
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
