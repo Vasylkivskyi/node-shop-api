@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const knex = require('../db/knex');
 
-router.get('/', (req, res, next) => {
-  res.status(200).json({ message: 'You knocking on products GET route' });
+router.get('/', async (req, res, next) => {
+  const products = await knex('products');
+  res.status(200).json({ data: products });
 });
 
 router.post('/', (req, res, next) => {

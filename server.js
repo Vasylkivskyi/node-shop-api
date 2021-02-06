@@ -6,6 +6,7 @@ const productsRouter = require('./api/routes/products');
 const ordersRouter = require('./api/routes/orders');
 
 const port = process.env.PORT || 5000;
+require('dotenv').config()
 const app = express();
 
 

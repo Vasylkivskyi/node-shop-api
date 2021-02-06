@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Just a basic shop API build using Node.js
+Just a basic shop API build using Node.js, Express.js, PostgreSQL
 
 ## Code Samples
 
