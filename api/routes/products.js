@@ -1,22 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const knex = require('../db/knex');
+const Product = require('../models/product');
 
 router.get('/', async (req, res, next) => {
   const products = await knex('products');
   res.status(200).json({ data: products });
 });
 
-router.post('/', (req, res, next) => {
-  console.log(req)
-  const product = {
-    name: req.body.name,
-    price: req.body.price,
+router.post('/', async (req, res, next) => {
+  const product = new Product(req.body.name, req.body.price);
+  try {
+    const result = await product.save();
+    res.status(201).json({
+      message: 'Product was saved' ,
+      data: result,
+    });
   }
-  res.status(201).json({
-    message: 'You knocking on products POST route' ,
-    product,
-  });
+  catch(err) {
+    console.log(err)
+    res.status(500)
+    throw new Error(err.message)
+  }
 })
 
 router.get('/:productId', (req, res, next) => {
