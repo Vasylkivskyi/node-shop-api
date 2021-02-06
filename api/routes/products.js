@@ -6,7 +6,15 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  res.status(200).json({ message: 'You knocking on products POST route' })
+  console.log(req)
+  const product = {
+    name: req.body.name,
+    price: req.body.price,
+  }
+  res.status(201).json({
+    message: 'You knocking on products POST route' ,
+    product,
+  });
 })
 
 router.get('/:productId', (req, res, next) => {

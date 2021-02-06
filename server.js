@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
 const productsRouter = require('./api/routes/products');
 const ordersRouter = require('./api/routes/orders');
@@ -9,6 +10,28 @@ const app = express();
 
 
 app.use(morgan('dev'));
+app.use(bodyParser.urlencoded({ extended: false })); // Used to encode submitted data from html forms
+app.use(bodyParser.json()); // Used to encode json data
+app.use((req, res, next) => {
+  // Gives access to any client (you can replace "*" with your site url)
+  res.header('Access-Control-Allow-Origin', '*');
+  // Defines with kind of headers we want to accept
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization' // if all => replace with '*'
+  );
+  // Browser always sends OPTIONS request first than you send POST request
+  if (req.method === 'OPTIONS') {
+    res.header(
+      'Access-Control-Allow-Methods',
+      'GET, PUT, PATCH, POST, DELETE' // Specify with methods your API allows
+    );
+    return res.status(200).json({}); // From here we don't want to go to our routes
+  }
+  next()
+})
+
+// Routes
 app.use('/products', productsRouter);
 app.use('/orders', ordersRouter);
 
@@ -18,6 +41,7 @@ app.use((req, res, next) => {
   error.status = 404;
   next(error);
 });
+
 // Custom errors middleware
 app.use((error, req, res, next) => {
   res.status(error.status || 500)
