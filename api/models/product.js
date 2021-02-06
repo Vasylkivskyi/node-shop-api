@@ -14,7 +14,13 @@ module.exports = class Product {
     return result;
   }
 
-  get = async () => {
-    return null
+  static get = async (productId) => {
+    const result = await knex('products').select('*').where({ id: productId });
+    return result;
+  }
+
+  static getAll = async ({ page = 1, limit = 8 }) => {
+    const result = await knex('products').select('*').limit(limit).offset((page - 1) * limit);
+    return result;
   }
 }
