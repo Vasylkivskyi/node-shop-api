@@ -1,7 +1,7 @@
 const express = require('express');
 const responseHelper = require('../helpers.js/responseHelper');
 const router = express.Router();
-const Product = require('../models/product');
+const Product = require('../models/Product');
 
 router.get('/', async (req, res, next) => {
   const { page, limit } = req.query;
