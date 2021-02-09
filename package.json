@@ -13,7 +13,7 @@
     "init-light": " npm i && npm run db:pg:migrate",
     "migrate:local": "npm run drop:db && npm run init-light",
     "db:pg:seed": "$(npm bin)/knex --knexfile=./knexfile.js seed:run",
-    "lint": "node_modules/.bin/eslint ./ --fix"
+    "lint": "eslint . --ext .js --fix"
   },
   "husky": {
     "hooks": {
