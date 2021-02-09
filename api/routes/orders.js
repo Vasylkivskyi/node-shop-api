@@ -1,10 +1,11 @@
-const express = require('express');
-const responseHelper = require('../helpers.js/responseHelper');
-const router = express.Router();
-const Order = require('../models/Order');
-const Product = require('../models/Product');
+const express = require("express");
+const responseHelper = require("../helpers.js/responseHelper");
 
-router.get('/', async (req, res, next) => {
+const router = express.Router();
+const Order = require("../models/Order");
+const Product = require("../models/Product");
+
+router.get("/", async (req, res, next) => {
   const { page, limit } = req.query;
   try {
     const orders = await Order.all({ page, limit });
@@ -12,21 +13,21 @@ router.get('/', async (req, res, next) => {
       page,
       limit,
       total: orders.length ? orders[0].total : 0,
-      data: orders
-     }))
+      data: orders,
+    }));
   } catch (error) {
     next(error);
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   const product = await Product.findById(req.body.productId);
   if (!product.length) {
-    const error = new Error('Not found');
+    const error = new Error("Not found");
     error.status = 404;
     next(error);
   } else {
-    const order = new Order(product[0].id, req.body.quantity)
+    const order = new Order(product[0].id, req.body.quantity);
     try {
       const savedOrder = await order.save();
       res.status(201).json(responseHelper({ data: savedOrder }));
@@ -36,14 +37,13 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.get('/:orderId', async (req, res, next) => {
-  console.log('main')
+router.get("/:orderId", async (req, res, next) => {
   try {
     const ordersData = Order.findById(req.params.orderId);
     if (ordersData.length) {
       res.status(200).json(responseHelper({ data: ordersData.shift() }));
     } else {
-      const error = new Error('Not found');
+      const error = new Error("Not found");
       error.status = 404;
       next(error);
     }
@@ -52,12 +52,12 @@ router.get('/:orderId', async (req, res, next) => {
   }
 });
 
-router.delete('/:orderId', async (req, res, next) => {
+router.delete("/:orderId", async (req, res, next) => {
   try {
     const result = await Order.remove(req.params.orderId);
-    res.status(200).json(responseHelper({data: result[0]}));
+    res.status(200).json(responseHelper({ data: result[0] }));
   } catch (error) {
-    next(error)
+    next(error);
   }
 });
 

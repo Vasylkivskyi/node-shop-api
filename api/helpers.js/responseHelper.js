@@ -1,10 +1,10 @@
-module.exports = ({ data = [], limit, page, error, total }) => {
-  return {
-    metadata: {
-      total,
-      page,
-      limit,
-    },
-    data
-  }
-}
+module.exports = ({
+  data = [], limit, page, total,
+}) => ({
+  metadata: {
+    total,
+    page,
+    limit,
+  },
+  data,
+});

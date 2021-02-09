@@ -1,9 +1,10 @@
-const express = require('express');
-const responseHelper = require('../helpers.js/responseHelper');
-const router = express.Router();
-const Product = require('../models/Product');
+const express = require("express");
+const responseHelper = require("../helpers.js/responseHelper");
 
-router.get('/', async (req, res, next) => {
+const router = express.Router();
+const Product = require("../models/Product");
+
+router.get("/", async (req, res, next) => {
   const { page, limit } = req.query;
   try {
     const products = await Product.all({ page, limit });
@@ -18,7 +19,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res, next) => {
+router.post("/", async (req, res, next) => {
   const product = new Product(req.body.name, req.body.price);
   try {
     const result = await product.save();
@@ -28,11 +29,11 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-router.get('/:productId', async (req, res, next) => {
+router.get("/:productId", async (req, res, next) => {
   try {
     const product = await Product.findById(req.params.productId);
     if (!product.length) {
-      const error = new Error('Not found');
+      const error = new Error("Not found");
       error.status = 404;
       throw error;
     }
@@ -44,19 +45,19 @@ router.get('/:productId', async (req, res, next) => {
   }
 });
 
-router.patch('/:productId', async(req, res, next) => {
+router.patch("/:productId", async (req, res, next) => {
   const { name, price } = req.body;
   try {
     const newProduct = await Product.update(req.params.productId, {
       name, price,
-    })
+    });
     res.status(200).json(responseHelper({ data: newProduct }));
   } catch (error) {
     next(error);
   }
 });
 
-router.delete('/:productId', async(req, res, next) => {
+router.delete("/:productId", async (req, res, next) => {
   try {
     const deletedProduct = await Product.remove(req.params.productId);
     res.status(200).json(responseHelper({ data: deletedProduct }));
