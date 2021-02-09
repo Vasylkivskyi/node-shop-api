@@ -7,7 +7,6 @@ module.exports = class Order {
   }
 
   async save() {
-    console.log("fksjdfkljs");
     const result = await knex("orders")
       .insert({
         product_id: this.productId,
