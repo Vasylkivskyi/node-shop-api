@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 app.use("/products", productsRouter);
 app.use("/orders", ordersRouter);
 
-// Handling not found error
+// Handling all other routes with not found error
 app.use((req, res, next) => {
   const error = new Error("Not found");
   error.status = 404;
@@ -46,7 +46,8 @@ app.use((req, res, next) => {
 });
 
 // Custom errors middleware
-app.use((error, req, res) => {
+// eslint-disable-next-line no-unused-vars
+app.use((error, req, res, next) => {
   res.status(error.status || 500);
   res.json({
     error: {

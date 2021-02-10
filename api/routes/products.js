@@ -48,10 +48,10 @@ router.get("/:productId", async (req, res, next) => {
 router.patch("/:productId", async (req, res, next) => {
   const { name, price } = req.body;
   try {
-    const newProduct = await Product.update(req.params.productId, {
+    const updatedProduct = await Product.update(req.params.productId, {
       name, price,
     });
-    res.status(200).json(responseHelper({ data: newProduct }));
+    res.status(200).json(responseHelper({ data: updatedProduct }));
   } catch (error) {
     next(error);
   }

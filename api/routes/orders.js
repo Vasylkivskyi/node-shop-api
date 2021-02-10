@@ -39,7 +39,7 @@ router.post("/", async (req, res, next) => {
 
 router.get("/:orderId", async (req, res, next) => {
   try {
-    const ordersData = Order.findById(req.params.orderId);
+    const ordersData = await Order.findById(req.params.orderId);
     if (ordersData.length) {
       res.status(200).json(responseHelper({ data: ordersData.shift() }));
     } else {

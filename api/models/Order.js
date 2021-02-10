@@ -17,15 +17,31 @@ module.exports = class Order {
   }
 
   static async all({ limit, page }) {
-    const result = await knex("orders")
-      .select()
+    const result = await knex("orders as o")
+      .select([
+        "o.id",
+        "o.quantity",
+        "p.id as product_id",
+        "p.price",
+        "o.created_at",
+      ])
+      .innerJoin("products as p", "p.id", "o.product_id")
       .limit(limit)
       .offset((page - 1) * limit);
     return result;
   }
 
   static async findById(orderId) {
-    const result = await knex("orders").where({ id: orderId });
+    const result = await knex("orders as o")
+      .select([
+        "o.id",
+        "o.quantity",
+        "p.id as product_id",
+        "p.price",
+        "o.created_at",
+      ])
+      .leftJoin("products as p", "p.id", "o.product_id")
+      .where("o.id", orderId);
     return result;
   }
 
